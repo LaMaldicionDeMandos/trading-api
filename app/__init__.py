@@ -1,6 +1,9 @@
 import os
-import requests
 from flask import Flask
+from flask_restful import Api
+
+from app.resources.indexes import Index
+from app.services.api import ApiService
 
 
 def create_app(conf=None):
@@ -21,12 +24,10 @@ def create_app(conf=None):
     except OSError:
         pass
 
-    @app.route('/indexes')
-    def indexes():
-        url = '%s/indexes' % app.config['API_BASE_URL']
-        headers = {'x-api-key': app.config['API_KEY'], 'Accept': 'application/json'}
-        response = app.make_response((requests.get(url, headers=headers).text, 200))
-        response.mimetype = 'application/json'
-        return response
+    api = Api(app)
+
+    api_service = ApiService(app.config)
+
+    api.add_resource(Index, '/indexes', resource_class_args=[api_service])
 
     return app
