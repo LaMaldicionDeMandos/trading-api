@@ -1,5 +1,7 @@
 import os
+import requests
 from flask import Flask
+
 
 def create_app(conf=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -19,8 +21,12 @@ def create_app(conf=None):
     except OSError:
         pass
 
-    @app.route('/')
-    def hello():
-        return 'Hello, World! Api key: %s.' % app.config['API_KEY']
+    @app.route('/indexes')
+    def indexes():
+        url = '%s/indexes' % app.config['API_BASE_URL']
+        headers = {'x-api-key': app.config['API_KEY'], 'Accept': 'application/json'}
+        response = app.make_response((requests.get(url, headers=headers).text, 200))
+        response.mimetype = 'application/json'
+        return response
 
     return app

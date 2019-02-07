@@ -4,6 +4,6 @@ _basedir = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = False
 
-API_KEY = os.environ.get('API_KEY', default="API_DEFAULT")
-
+API_KEY = os.environ.get('API_KEY')
+API_BASE_URL = os.environ.get('API_BASE_URL')
 del os
