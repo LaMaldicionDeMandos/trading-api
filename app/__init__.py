@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 from flask_restful import Api
+from flask_caching import Cache
+cache = Cache(config={'CACHE_TYPE': 'simple'})
 
 from app.resources.indexes import Index
 from app.services.api import ApiService
@@ -8,6 +10,7 @@ from app.services.api import ApiService
 
 def create_app(conf=None):
     app = Flask(__name__, instance_relative_config=True)
+    cache.init_app(app)
     app.config.from_mapping(
         API_KEY='API!!!'
     )
